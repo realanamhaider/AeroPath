@@ -125,6 +125,13 @@ const completionPercentage =
     ? 0
     : Math.round((completedMissions / totalMissions) * 100);
 
+const nextMission = missions
+  .filter((mission) => !mission.completed && mission.dueDate)
+  .sort((a, b) => a.dueDate.localeCompare(b.dueDate))[0];
+
+const missionStatus =
+  overdueMissions > 0 ? "Needs attention" : "On track";
+
   if (loading) {
     return (
       <main className="auth-page">
@@ -225,6 +232,32 @@ const completionPercentage =
 
   </div>
 
+</section>
+
+<section className="mission-status-panel">
+  <div>
+    <p className="card-label">MISSION STATUS</p>
+    <h2
+  className={
+    overdueMissions > 0 ? "status-warning" : "status-good"
+  }
+>
+  {missionStatus}
+</h2>
+  </div>
+
+  <div>
+    <p className="card-label">NEXT MISSION</p>
+
+    {nextMission ? (
+      <>
+        <h3>{nextMission.title}</h3>
+        <p>Due: {nextMission.dueDate}</p>
+      </>
+    ) : (
+      <p>No upcoming missions.</p>
+    )}
+  </div>
 </section>
 
       {error && <p className="auth-error">{error}</p>}

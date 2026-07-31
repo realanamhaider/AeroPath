@@ -922,3 +922,33 @@ button:disabled {
     flex-direction: column;
   }
 }
+.mission-status-panel {
+  width: min(980px, 92%);
+  margin: 24px auto;
+  padding: 22px;
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 24px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.035);
+}
+
+.mission-status-panel h2,
+.mission-status-panel h3 {
+  margin: 6px 0;
+}
+
+.status-good {
+  color: #72d7bd;
+}
+
+.status-warning {
+  color: #e5b96b;
+}
+
+@media (max-width: 650px) {
+  .mission-status-panel {
+    grid-template-columns: 1fr;
+  }
+}
