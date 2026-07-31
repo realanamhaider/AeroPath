@@ -729,3 +729,196 @@ button:disabled {
     flex-direction: column;
   }
 }
+.dashboard-stats {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+  margin: 28px auto;
+  width: min(1180px, 92%);
+}
+
+.stat-card,
+.progress-card {
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.035);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.18);
+}
+
+.stat-card {
+  min-height: 105px;
+  padding: 20px;
+}
+
+.stat-card h2 {
+  margin: 8px 0 0;
+  font-size: 2rem;
+}
+
+.progress-card {
+  grid-column: 1 / -1;
+  padding: 22px;
+}
+
+.progress-heading {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.progress-heading h2 {
+  margin: 6px 0 0;
+}
+
+.progress-heading > p {
+  margin: 0;
+  opacity: 0.7;
+}
+
+.progress-track {
+  height: 8px;
+  margin-top: 16px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.progress-fill {
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #2477d8, #54a7ff);
+  transition: width 0.3s ease;
+}
+
+/* Mission section */
+.missions-section {
+  width: min(980px, 92%);
+  margin: 38px auto 70px;
+}
+
+.missions-heading {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.mission-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 9px;
+  margin: 22px 0;
+}
+
+.filter-button {
+  padding: 9px 16px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.04);
+  color: inherit;
+  cursor: pointer;
+}
+
+.filter-button:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.filter-button.active {
+  border-color: rgba(79, 158, 255, 0.7);
+  background: rgba(79, 158, 255, 0.16);
+}
+
+/* Real mission cards */
+.mission-list {
+  display: grid;
+  gap: 14px;
+}
+
+.user-mission-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.035);
+}
+
+.mission-card-content h3 {
+  margin: 5px 0;
+  font-size: 1.15rem;
+}
+
+.mission-description {
+  margin: 8px 0 0;
+  opacity: 0.7;
+}
+
+.mission-card-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.edit-mission-button,
+.complete-mission-button,
+.delete-mission-button {
+  padding: 9px 14px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.055);
+  color: inherit;
+  cursor: pointer;
+}
+
+.edit-mission-button:hover,
+.complete-mission-button:hover {
+  background: rgba(79, 158, 255, 0.15);
+}
+
+.delete-mission-button {
+  opacity: 0.7;
+}
+
+.delete-mission-button:hover {
+  opacity: 1;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.user-mission-card.completed {
+  opacity: 0.58;
+}
+
+.user-mission-card.completed h3 {
+  text-decoration: line-through;
+}
+
+@media (max-width: 800px) {
+  .dashboard-stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .user-mission-card {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .mission-card-actions {
+    justify-content: flex-start;
+  }
+}
+
+@media (max-width: 520px) {
+  .dashboard-stats {
+    grid-template-columns: 1fr;
+  }
+
+  .progress-heading,
+  .missions-heading {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}
