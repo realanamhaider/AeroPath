@@ -667,3 +667,65 @@ button:disabled {
   text-align: center;
   color: rgba(255, 255, 255, 0.7);
 }
+.dashboard-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  margin: 1.5rem 0;
+}
+
+.stat-card,
+.progress-card {
+  padding: 1.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.stat-card h2,
+.progress-card h2 {
+  margin: 0.4rem 0 0;
+  font-size: 2rem;
+}
+
+.progress-card {
+  grid-column: 1 / -1;
+}
+
+.progress-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 1rem;
+}
+
+.progress-track {
+  width: 100%;
+  height: 10px;
+  margin-top: 1rem;
+  overflow: hidden;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.progress-fill {
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #147d64, #4fd1ad);
+  transition: width 0.3s ease;
+}
+
+@media (max-width: 700px) {
+  .dashboard-stats {
+    grid-template-columns: 1fr;
+  }
+
+  .progress-card {
+    grid-column: auto;
+  }
+
+  .progress-heading {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}

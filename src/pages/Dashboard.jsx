@@ -78,9 +78,19 @@ function Dashboard() {
     loadProfile();
   }, []);
   
+const today = new Date().toISOString().split("T")[0];
+
 const filteredMissions = missions.filter((mission) => {
   if (activeFilter === "completed") {
     return mission.completed === true;
+  }
+
+  if (activeFilter === "overdue") {
+    return (
+      mission.completed !== true &&
+      mission.dueDate &&
+      mission.dueDate < today
+    );
   }
 
   return (
@@ -88,6 +98,32 @@ const filteredMissions = missions.filter((mission) => {
     mission.completed !== true
   );
 });
+
+const totalMissions = missions.length;
+
+const completedMissions = missions.filter(
+  (mission) => mission.completed === true
+).length;
+
+const overdueMissions = missions.filter(
+  (mission) =>
+    mission.completed !== true &&
+    mission.dueDate &&
+    mission.dueDate < today
+).length;
+
+const todayMissions = missions.filter(
+  (mission) =>
+    mission.timeframe === "today" &&
+    mission.completed !== true
+).length;
+
+const remainingMissions = totalMissions - completedMissions;
+
+const completionPercentage =
+  totalMissions === 0
+    ? 0
+    : Math.round((completedMissions / totalMissions) * 100);
 
   if (loading) {
     return (
@@ -136,6 +172,61 @@ const filteredMissions = missions.filter((mission) => {
   </div>
 </section>
 
+<section className="dashboard-stats">
+
+  <div className="stat-card">
+    <p className="card-label">TODAY'S MISSIONS</p>
+    <h2>{todayMissions}</h2>
+  </div>
+
+  <div className="stat-card">
+    <p className="card-label">OVERDUE</p>
+    <h2>{overdueMissions}</h2>
+  </div>
+
+  <div className="stat-card">
+    <p className="card-label">COMPLETED</p>
+    <h2>{completedMissions}</h2>
+  </div>
+
+  <div className="stat-card">
+    <p className="card-label">REMAINING</p>
+    <h2>{remainingMissions}</h2>
+  </div>
+
+  <div className="progress-card">
+
+    <div className="progress-heading">
+
+      <div>
+        <p className="card-label">
+          FLIGHT PROGRESS
+        </p>
+
+        <h2>{completionPercentage}%</h2>
+      </div>
+
+      <p>
+        {completedMissions} of {totalMissions} missions complete
+      </p>
+
+    </div>
+
+    <div className="progress-track">
+
+      <div
+        className="progress-fill"
+        style={{
+          width: `${completionPercentage}%`,
+        }}
+      />
+
+    </div>
+
+  </div>
+
+</section>
+
       {error && <p className="auth-error">{error}</p>}
 
 <section className="missions-section">
@@ -174,6 +265,16 @@ const filteredMissions = missions.filter((mission) => {
   >
     This Month
   </button>
+<button
+  className={
+    activeFilter === "overdue"
+      ? "filter-button active"
+      : "filter-button"
+  }
+  onClick={() => setActiveFilter("overdue")}
+>
+  Overdue
+</button>
 
   <button
     className={
