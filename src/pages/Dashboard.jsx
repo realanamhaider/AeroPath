@@ -99,6 +99,14 @@ const filteredMissions = missions.filter((mission) => {
   );
 });
 
+const sortedFilteredMissions = [...filteredMissions].sort((a, b) => {
+  if (!a.dueDate && !b.dueDate) return 0;
+  if (!a.dueDate) return 1;
+  if (!b.dueDate) return -1;
+
+  return a.dueDate.localeCompare(b.dueDate);
+});
+
 const totalMissions = missions.length;
 
 const completedMissions = missions.filter(
@@ -322,13 +330,13 @@ const missionStatus =
 </div>
 
 <div className="mission-list">
-  {filteredMissions.length === 0 ? (
+  {sortedFilteredMissions.length === 0 ? (
     <div className="empty-missions">
       <h3>No missions here yet.</h3>
       <p>Add a mission or choose another flight-plan category.</p>
     </div>
   ) : (
-    filteredMissions.map((mission) => (
+    sortedFilteredMissions.map((mission) => (
       <UserMissionCard key={mission.id} mission={mission} />
     ))
   )}

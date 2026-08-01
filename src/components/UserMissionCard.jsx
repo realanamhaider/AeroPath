@@ -2,6 +2,29 @@ import { deleteDoc, doc, updateDoc } from "firebase/firestore";
 import { auth, db } from "../firebase/firebase";
 import { useNavigate } from "react-router-dom";
 
+function formatDueDate(dateString) {
+  if (!dateString) return "";
+
+  const [year, month, day] = dateString.split("-").map(Number);
+  const dueDate = new Date(year, month - 1, day);
+
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  const differenceInDays = Math.round(
+    (dueDate - today) / (1000 * 60 * 60 * 24)
+  );
+
+  if (differenceInDays === 0) return "Today";
+  if (differenceInDays === 1) return "Tomorrow";
+  if (differenceInDays === -1) return "Yesterday";
+
+  return dueDate.toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+  });
+}
 function UserMissionCard({ mission }) {
   const navigate = useNavigate();
 
@@ -78,7 +101,22 @@ function UserMissionCard({ mission }) {
           </p>
         )}
       </div>
+      
+      <div className="mission-meta">
+          {mission.category && <span>{mission.category}</span>}
 
+           {mission.priority && (
+         <span>{mission.priority} priority</span>
+  )}
+
+  {mission.dueDate && (
+    <span>Due {formatDueDate(mission.dueDate)}</span>
+  )}
+
+  {mission.estimatedMinutes > 0 && (
+    <span>{mission.estimatedMinutes} min</span>
+  )}
+</div>
       <div className="mission-card-actions">
         <button
            type="button"

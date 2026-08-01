@@ -1,10 +1,10 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 import { auth, db } from "../firebase/firebase";
 
 function AddMission() {
-  const navigate = useNavigate();
+  const submissionLocked = useRef(false);
 
   const [title, setTitle] = useState("");
   const [category, setCategory] = useState("Academics");
@@ -15,36 +15,65 @@ function AddMission() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  async function handleSubmit(event) {
-    event.preventDefault();
-    setError("");
-    setLoading(true);
+async function handleSubmit(event) {
+  event.preventDefault();
 
-    try {
-      const user = auth.currentUser;
+  if (submissionLocked.current) return;
 
-      if (!user) {
-        throw new Error("You must be signed in to create a mission.");
-      }
+  setError("");
 
-      await addDoc(collection(db, "users", user.uid, "missions"), {
-        title: title.trim(),
-        category,
-        priority,
-        timeframe,
-        dueDate,
-        estimatedMinutes: Number(estimatedMinutes),
-        completed: false,
-        createdAt: serverTimestamp(),
-      });
+  const trimmedTitle = title.trim();
+  const minutes = Number(estimatedMinutes);
 
-      navigate("/dashboard");
-    } catch (err) {
-      setError(err.message);
-    } finally {
-      setLoading(false);
-    }
+  if (trimmedTitle.length < 3) {
+    setError("Mission title must be at least 3 characters.");
+    return;
   }
+
+  if (trimmedTitle.length > 100) {
+    setError("Mission title must be 100 characters or fewer.");
+    return;
+  }
+
+  if (!dueDate) {
+    setError("Please choose a due date.");
+    return;
+  }
+
+  if (!Number.isFinite(minutes) || minutes < 5 || minutes > 1440) {
+    setError("Estimated time must be between 5 and 1,440 minutes.");
+    return;
+  }
+
+  submissionLocked.current = true;
+  setLoading(true);
+
+  try {
+    const user = auth.currentUser;
+
+    if (!user) {
+      throw new Error("You must be signed in to create a mission.");
+    }
+
+    await addDoc(collection(db, "users", user.uid, "missions"), {
+      title: trimmedTitle,
+      category,
+      priority,
+      timeframe,
+      dueDate,
+      estimatedMinutes: minutes,
+      completed: false,
+      createdAt: serverTimestamp(),
+    });
+
+    navigate("/dashboard");
+  } catch (err) {
+    setError(err.message || "Could not create your mission.");
+  } finally {
+    submissionLocked.current = false;
+    setLoading(false);
+  }
+}
 
   return (
     <main className="auth-page">
@@ -65,6 +94,8 @@ function AddMission() {
               value={title}
               onChange={(event) => setTitle(event.target.value)}
               placeholder="Complete calculus assignment"
+              maxLength={100}
+              disabled={loading}
               required
             />
           </label>
@@ -125,6 +156,7 @@ function AddMission() {
               onChange={(event) => setEstimatedMinutes(event.target.value)}
               placeholder="45"
               min="5"
+              max="1440"
               required
             />
           </label>
@@ -140,6 +172,7 @@ function AddMission() {
           type="button"
           className="secondary-button"
           onClick={() => navigate("/dashboard")}
+          disabled={loading}
         >
           Cancel
         </button>

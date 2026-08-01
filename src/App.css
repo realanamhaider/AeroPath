@@ -952,3 +952,18 @@ button:disabled {
     grid-template-columns: 1fr;
   }
 }
+.mission-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.mission-meta span {
+  padding: 5px 9px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.04);
+  font-size: 0.78rem;
+  opacity: 0.8;
+}
