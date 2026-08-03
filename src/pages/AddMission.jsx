@@ -4,6 +4,7 @@ import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 import { auth, db } from "../firebase/firebase";
 
 function AddMission() {
+  const navigate = useNavigate();
   const submissionLocked = useRef(false);
 
   const [title, setTitle] = useState("");
@@ -22,7 +23,9 @@ async function handleSubmit(event) {
 
   setError("");
 
-  const trimmedTitle = title.trim();
+  const trimmedTitle = title
+    .trim()
+    .replace(/^./, (letter) => letter.toUpperCase());
   const minutes = Number(estimatedMinutes);
 
   if (trimmedTitle.length < 3) {

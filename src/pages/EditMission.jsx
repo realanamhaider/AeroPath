@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { auth, db } from "../firebase/firebase";
@@ -6,6 +6,7 @@ import { auth, db } from "../firebase/firebase";
 function EditMission() {
   const navigate = useNavigate();
   const { missionId } = useParams();
+  const savingLocked = useRef(false);
 
   const [title, setTitle] = useState("");
   const [category, setCategory] = useState("Academics");
@@ -63,7 +64,41 @@ function EditMission() {
 
   async function handleSubmit(event) {
     event.preventDefault();
+
+    if (savingLocked.current) return;
+
     setError("");
+
+    const trimmedTitle = title.trim();
+    const minutes = Number(estimatedMinutes);
+
+    if (trimmedTitle.length < 3) {
+      setError("Mission title must be at least 3 characters.");
+      return;
+    }
+
+    if (trimmedTitle.length > 100) {
+      setError("Mission title must be 100 characters or fewer.");
+      return;
+    }
+
+    if (!dueDate) {
+      setError("Please choose a due date.");
+      return;
+    }
+
+    if (
+      !Number.isFinite(minutes) ||
+      minutes < 5 ||
+      minutes > 1440
+    ) {
+      setError(
+        "Estimated time must be between 5 and 1,440 minutes."
+      );
+      return;
+    }
+
+    savingLocked.current = true;
     setSaving(true);
 
     try {
@@ -82,18 +117,19 @@ function EditMission() {
       );
 
       await updateDoc(missionRef, {
-        title: title.trim(),
+        title: trimmedTitle,
         category,
         priority,
         timeframe,
         dueDate,
-        estimatedMinutes: Number(estimatedMinutes),
+        estimatedMinutes: minutes,
       });
 
       navigate("/dashboard");
     } catch (err) {
-      setError(err.message);
+      setError(err.message || "Could not save your changes.");
     } finally {
+      savingLocked.current = false;
       setSaving(false);
     }
   }
@@ -124,6 +160,8 @@ function EditMission() {
               type="text"
               value={title}
               onChange={(event) => setTitle(event.target.value)}
+              maxLength={100}
+              disabled={saving}
               required
             />
           </label>
@@ -133,6 +171,7 @@ function EditMission() {
             <select
               value={category}
               onChange={(event) => setCategory(event.target.value)}
+              disabled={saving}
             >
               <option>Academics</option>
               <option>Career</option>
@@ -147,6 +186,7 @@ function EditMission() {
             <select
               value={priority}
               onChange={(event) => setPriority(event.target.value)}
+              disabled={saving}
             >
               <option>Low</option>
               <option>Medium</option>
@@ -159,6 +199,7 @@ function EditMission() {
             <select
               value={timeframe}
               onChange={(event) => setTimeframe(event.target.value)}
+              disabled={saving}
             >
               <option value="today">Today</option>
               <option value="week">This Week</option>
@@ -172,6 +213,7 @@ function EditMission() {
               type="date"
               value={dueDate}
               onChange={(event) => setDueDate(event.target.value)}
+              disabled={saving}
               required
             />
           </label>
@@ -185,6 +227,8 @@ function EditMission() {
                 setEstimatedMinutes(event.target.value)
               }
               min="5"
+              max="1440"
+              disabled={saving}
               required
             />
           </label>
@@ -200,6 +244,7 @@ function EditMission() {
           type="button"
           className="secondary-button"
           onClick={() => navigate("/dashboard")}
+          disabled={saving}
         >
           Cancel
         </button>
