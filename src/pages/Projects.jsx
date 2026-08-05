@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   addDoc,
   collection,
@@ -15,6 +16,7 @@ import { auth, db } from "../firebase/firebase";
 import DashboardNav from "../components/DashboardNav";
 
 function Projects() {
+  const navigate = useNavigate();
   const creatingLocked = useRef(false);
 
   const [projects, setProjects] = useState([]);
@@ -68,7 +70,10 @@ function Projects() {
 
     setError("");
 
-    const trimmedTitle = title.trim();
+    const trimmedTitle = title
+      .trim()
+      .replace(/^./, (letter) => letter.toUpperCase());
+
     const trimmedDescription = description.trim();
 
     if (trimmedTitle.length < 3) {
@@ -104,15 +109,13 @@ function Projects() {
       await addDoc(
         collection(db, "users", user.uid, "projects"),
         {
-          title: trimmedTitle.replace(
-            /^./,
-            (letter) => letter.toUpperCase()
-          ),
+          title: trimmedTitle,
           description: trimmedDescription,
           category,
           deadline,
           progress: 0,
           completed: false,
+          completedAt: null,
           createdAt: serverTimestamp(),
         }
       );
@@ -146,10 +149,12 @@ function Projects() {
       );
 
       await updateDoc(projectRef, {
-    completed: !project.completed,
-    progress: project.completed ? 0 : 100,
-    completedAt: project.completed ? null : serverTimestamp(),
-  });
+        completed: !project.completed,
+        progress: project.completed ? 0 : 100,
+        completedAt: project.completed
+          ? null
+          : serverTimestamp(),
+      });
     } catch (err) {
       setError(err.message || "Could not update the project.");
     }
@@ -359,7 +364,9 @@ function Projects() {
                       Due {project.deadline || "Not provided"}
                     </span>
 
-                    <span>{project.progress || 0}% complete</span>
+                    <span>
+                      {project.progress || 0}% complete
+                    </span>
                   </div>
 
                   <div className="progress-track">
@@ -372,6 +379,16 @@ function Projects() {
                   </div>
 
                   <div className="project-actions">
+                    <button
+                      type="button"
+                      className="edit-mission-button"
+                      onClick={() =>
+                        navigate(`/edit-project/${project.id}`)
+                      }
+                    >
+                      Edit
+                    </button>
+
                     <button
                       type="button"
                       onClick={() =>

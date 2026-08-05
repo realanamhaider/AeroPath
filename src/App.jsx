@@ -21,6 +21,7 @@ import Dashboard from "./pages/Dashboard";
 import AddMission from "./pages/AddMission";
 import EditMission from "./pages/EditMission";
 import Projects from "./pages/Projects";
+import EditProject from "./pages/EditProject";
 import Internships from "./pages/Internships";
 import Roadmap from "./pages/Roadmap";
 import Profile from "./pages/Profile";
@@ -140,6 +141,18 @@ function App() {
             authLoading={authLoading}
           >
             <Projects />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/edit-project/:projectId"
+        element={
+          <ProtectedRoute 
+            user={user}
+            authLoading={authLoading}
+          >
+
+            <EditProject />
           </ProtectedRoute>
         }
       />
