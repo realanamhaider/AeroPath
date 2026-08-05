@@ -967,3 +967,32 @@ button:disabled {
   font-size: 0.78rem;
   opacity: 0.8;
 }
+.navbar-logo {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+  display: block;
+}
+.profile-form-card {
+  width: min(720px, 92%);
+  margin: 28px auto 70px;
+  padding: 28px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.035);
+}
+
+.profile-form-card form {
+  display: grid;
+  gap: 18px;
+}
+
+.profile-form-card label {
+  display: grid;
+  gap: 8px;
+}
+
+.auth-success {
+  margin: 0;
+  color: #72d7bd;
+}

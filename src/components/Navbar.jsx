@@ -2,7 +2,11 @@ function Navbar() {
   return (
     <nav className="navbar">
       <div className="brand">
-  <img src="/aeropath-logo.png" alt="AeroPath logo" />
+  <img
+  src="/favicon.png"
+  alt="AeroPath logo"
+  className="navbar-logo"
+/>
   <span>AeroPath</span>
 </div>
 
