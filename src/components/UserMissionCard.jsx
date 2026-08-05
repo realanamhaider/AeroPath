@@ -1,4 +1,9 @@
-import { deleteDoc, doc, updateDoc } from "firebase/firestore";
+import {
+  deleteDoc,
+  doc,
+  serverTimestamp,
+  updateDoc,
+} from "firebase/firestore";
 import { auth, db } from "../firebase/firebase";
 import { useNavigate } from "react-router-dom";
 
@@ -45,8 +50,9 @@ function UserMissionCard({ mission }) {
       );
 
       await updateDoc(missionRef, {
-        completed: !mission.completed,
-      });
+    completed: !mission.completed,
+    completedAt: mission.completed ? null : serverTimestamp(),
+    });
     } catch (error) {
       console.error("Could not update mission:", error);
     }

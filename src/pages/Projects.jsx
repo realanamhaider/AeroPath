@@ -146,9 +146,10 @@ function Projects() {
       );
 
       await updateDoc(projectRef, {
-        completed: !project.completed,
-        progress: project.completed ? 0 : 100,
-      });
+    completed: !project.completed,
+    progress: project.completed ? 0 : 100,
+    completedAt: project.completed ? null : serverTimestamp(),
+  });
     } catch (err) {
       setError(err.message || "Could not update the project.");
     }
