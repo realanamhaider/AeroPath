@@ -18,6 +18,7 @@ function DashboardNav() {
     <nav className="dashboard-nav">
       <NavLink to="/dashboard">Flight Plan</NavLink>
       <NavLink to="/projects">Projects</NavLink>
+      <NavLink to="/library">Library</NavLink>
       <NavLink to="/internships">Internships</NavLink>
       <NavLink to="/roadmap">Roadmap</NavLink>
       <NavLink to="/profile">Profile</NavLink>
