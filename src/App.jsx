@@ -1,3 +1,4 @@
+import Library from "./pages/Library";
 import { useEffect, useState } from "react";
 import {
   Navigate,
@@ -142,7 +143,17 @@ function App() {
           </ProtectedRoute>
         }
       />
-
+      <Route
+        path="/library"
+        element={
+          <ProtectedRoute 
+            user={user}
+            authLoading={authLoading}
+          >
+            <Library />
+          </ProtectedRoute>
+        }
+      />
       <Route
         path="/internships"
         element={

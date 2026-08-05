@@ -1146,3 +1146,274 @@ button:disabled {
     grid-template-columns: 1fr;
   }
 }
+.date-library-container {
+  width: min(980px, 92%);
+  margin: 30px auto 80px;
+}
+
+.date-library-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.date-library-card {
+  position: relative;
+  min-height: 180px;
+  padding: 24px;
+  text-align: left;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  background:
+    linear-gradient(
+      145deg,
+      rgba(255, 255, 255, 0.055),
+      rgba(255, 255, 255, 0.02)
+    );
+  color: inherit;
+  cursor: pointer;
+  transition:
+    transform 0.2s ease,
+    border-color 0.2s ease,
+    background 0.2s ease;
+}
+
+.date-library-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(79, 158, 255, 0.4);
+  background: rgba(79, 158, 255, 0.08);
+}
+
+.date-card-label {
+  display: block;
+  color: #57a8ff;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+}
+
+.date-library-card strong {
+  display: block;
+  margin: 24px 0 8px;
+  font-size: 2rem;
+}
+
+.date-library-card > span:not(.date-card-label):not(.date-card-arrow) {
+  opacity: 0.65;
+}
+
+.date-card-arrow {
+  position: absolute;
+  right: 22px;
+  bottom: 20px;
+  font-size: 1.3rem;
+  opacity: 0.7;
+}
+
+.selected-date-view {
+  padding: 28px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 22px;
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.library-back-button {
+  width: auto;
+  margin-bottom: 24px;
+  padding: 9px 15px;
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.selected-date-heading h2 {
+  margin: 6px 0;
+  font-size: 2rem;
+}
+
+.selected-date-heading > p:last-child {
+  opacity: 0.65;
+}
+
+.date-items-list {
+  display: grid;
+  gap: 12px;
+  margin-top: 26px;
+}
+
+.date-library-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 22px;
+  padding: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.025);
+}
+
+.date-library-item h3 {
+  margin: 9px 0 5px;
+}
+
+.date-library-item p {
+  margin: 0;
+  opacity: 0.7;
+}
+
+.date-item-labels {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.date-item-labels span,
+.library-status {
+  padding: 5px 9px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 999px;
+  font-size: 0.72rem;
+}
+
+.library-status {
+  white-space: nowrap;
+}
+
+.library-status.completed {
+  color: #72d7bd;
+  border-color: rgba(114, 215, 189, 0.3);
+}
+
+.library-status.past-due {
+  color: #e5b96b;
+  border-color: rgba(229, 185, 107, 0.3);
+}
+
+.library-status.active {
+  color: #70b7ff;
+  border-color: rgba(112, 183, 255, 0.3);
+}
+
+@media (max-width: 800px) {
+  .date-library-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 540px) {
+  .date-library-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .date-library-item {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}
+/* Refined Work Library cards */
+.date-library-grid {
+  gap: 18px;
+}
+
+.date-library-card {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  min-height: 185px;
+  padding: 25px 26px;
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: 22px;
+  background:
+    radial-gradient(
+      circle at top right,
+      rgba(70, 145, 255, 0.09),
+      transparent 48%
+    ),
+    linear-gradient(
+      145deg,
+      rgba(255, 255, 255, 0.045),
+      rgba(255, 255, 255, 0.015)
+    );
+  box-shadow:
+    0 18px 45px rgba(0, 0, 0, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.035);
+}
+
+.date-library-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  opacity: 0;
+  background: linear-gradient(
+    120deg,
+    transparent 20%,
+    rgba(75, 155, 255, 0.08),
+    transparent 80%
+  );
+  transition: opacity 0.25s ease;
+}
+
+.date-library-card:hover {
+  transform: translateY(-5px);
+  border-color: rgba(88, 165, 255, 0.4);
+  box-shadow:
+    0 22px 55px rgba(0, 0, 0, 0.28),
+    0 0 28px rgba(55, 125, 225, 0.07);
+}
+
+.date-library-card:hover::before {
+  opacity: 1;
+}
+
+.date-card-label {
+  font-family:
+    "Avenir Next",
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+  font-size: 0.67rem;
+  font-weight: 700;
+  letter-spacing: 0.21em;
+  opacity: 0.9;
+}
+
+.date-library-card strong {
+  display: block;
+  margin: 25px 0 7px;
+  font-family:
+    "SF Mono",
+    "Roboto Mono",
+    ui-monospace,
+    monospace;
+  font-size: 1.85rem;
+  font-weight: 650;
+  letter-spacing: -0.06em;
+  font-variant-numeric: tabular-nums;
+}
+
+.date-library-card > span:not(.date-card-label):not(.date-card-arrow) {
+  font-family:
+    "Avenir Next",
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+  font-size: 0.82rem;
+  letter-spacing: 0.015em;
+  opacity: 0.58;
+}
+
+.date-card-arrow {
+  right: 24px;
+  bottom: 22px;
+  font-size: 1.15rem;
+  opacity: 0.48;
+  transition:
+    transform 0.2s ease,
+    opacity 0.2s ease;
+}
+
+.date-library-card:hover .date-card-arrow {
+  transform: translateX(4px);
+  opacity: 0.9;
+}
