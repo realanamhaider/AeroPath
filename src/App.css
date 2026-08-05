@@ -996,3 +996,52 @@ button:disabled {
   margin: 0;
   color: #72d7bd;
 }
+.settings-container {
+  width: min(760px, 92%);
+  margin: 28px auto 70px;
+  display: grid;
+  gap: 18px;
+}
+
+.settings-card {
+  padding: 26px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.035);
+}
+
+.settings-card h2 {
+  margin: 6px 0 12px;
+}
+
+.settings-card > p:not(.card-label) {
+  opacity: 0.75;
+}
+
+.settings-detail {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 14px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.settings-detail:last-child {
+  border-bottom: 0;
+}
+
+.danger-zone {
+  border-color: rgba(229, 185, 107, 0.25);
+}
+
+.danger-button {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+@media (max-width: 600px) {
+  .settings-detail {
+    flex-direction: column;
+    gap: 5px;
+  }
+}
