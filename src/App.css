@@ -1417,3 +1417,36 @@ button:disabled {
   transform: translateX(4px);
   opacity: 0.9;
 }
+.project-progress-control {
+  display: flex;
+  align-items: flex-end;
+  gap: 10px;
+  margin: 16px 0 12px;
+}
+
+.project-progress-control label {
+  display: grid;
+  gap: 7px;
+  flex: 1;
+  font-size: 0.8rem;
+}
+
+.project-progress-control input {
+  width: 100%;
+}
+
+.project-progress-control button {
+  width: auto;
+  white-space: nowrap;
+}
+
+@media (max-width: 520px) {
+  .project-progress-control {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .project-progress-control button {
+    width: 100%;
+  }
+}

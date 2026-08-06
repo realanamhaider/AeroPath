@@ -20,6 +20,7 @@ function Projects() {
   const creatingLocked = useRef(false);
 
   const [projects, setProjects] = useState([]);
+  const [progressDrafts, setProgressDrafts] = useState({});
 
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -148,15 +149,73 @@ function Projects() {
         project.id
       );
 
+      const newCompletedStatus = !project.completed;
+
       await updateDoc(projectRef, {
-        completed: !project.completed,
-        progress: project.completed ? 0 : 100,
-        completedAt: project.completed
-          ? null
-          : serverTimestamp(),
+        completed: newCompletedStatus,
+        progress: newCompletedStatus ? 100 : 0,
+        completedAt: newCompletedStatus
+          ? serverTimestamp()
+          : null,
+      });
+
+      setProgressDrafts((current) => {
+        const updatedDrafts = { ...current };
+        delete updatedDrafts[project.id];
+        return updatedDrafts;
       });
     } catch (err) {
       setError(err.message || "Could not update the project.");
+    }
+  }
+
+  async function saveProjectProgress(project) {
+    setError("");
+
+    try {
+      const user = auth.currentUser;
+
+      if (!user) {
+        throw new Error("You must be signed in.");
+      }
+
+      const progress = Number(
+        progressDrafts[project.id] ?? project.progress ?? 0
+      );
+
+      if (
+        !Number.isFinite(progress) ||
+        progress < 0 ||
+        progress > 100
+      ) {
+        setError("Project progress must be between 0 and 100.");
+        return;
+      }
+
+      const projectRef = doc(
+        db,
+        "users",
+        user.uid,
+        "projects",
+        project.id
+      );
+
+      await updateDoc(projectRef, {
+        progress,
+        completed: progress === 100,
+        completedAt:
+          progress === 100 ? serverTimestamp() : null,
+      });
+
+      setProgressDrafts((current) => {
+        const updatedDrafts = { ...current };
+        delete updatedDrafts[project.id];
+        return updatedDrafts;
+      });
+    } catch (err) {
+      setError(
+        err.message || "Could not update project progress."
+      );
     }
   }
 
@@ -192,7 +251,10 @@ function Projects() {
 
   const today = `${now.getFullYear()}-${String(
     now.getMonth() + 1
-  ).padStart(2, "0")}-${String(now.getDate()).padStart(2, "0")}`;
+  ).padStart(2, "0")}-${String(now.getDate()).padStart(
+    2,
+    "0"
+  )}`;
 
   const completedProjects = projects.filter(
     (project) => project.completed
@@ -213,7 +275,6 @@ function Projects() {
 
       <section className="dashboard-header">
         <p className="card-label">PROJECTS</p>
-
         <h1>Your Projects</h1>
 
         <p>
@@ -280,7 +341,9 @@ function Projects() {
             Category
             <select
               value={category}
-              onChange={(event) => setCategory(event.target.value)}
+              onChange={(event) =>
+                setCategory(event.target.value)
+              }
               disabled={creating}
             >
               <option>Engineering</option>
@@ -297,7 +360,9 @@ function Projects() {
             <input
               type="date"
               value={deadline}
-              onChange={(event) => setDeadline(event.target.value)}
+              onChange={(event) =>
+                setDeadline(event.target.value)
+              }
               disabled={creating}
               required
             />
@@ -306,7 +371,9 @@ function Projects() {
           {error && <p className="auth-error">{error}</p>}
 
           <button type="submit" disabled={creating}>
-            {creating ? "Creating Project..." : "Create Project"}
+            {creating
+              ? "Creating Project..."
+              : "Create Project"}
           </button>
         </form>
       </section>
@@ -331,6 +398,11 @@ function Projects() {
                 !project.completed &&
                 project.deadline &&
                 project.deadline < today;
+
+              const progressValue =
+                progressDrafts[project.id] ??
+                project.progress ??
+                0;
 
               return (
                 <article
@@ -364,16 +436,41 @@ function Projects() {
                       Due {project.deadline || "Not provided"}
                     </span>
 
-                    <span>
-                      {project.progress || 0}% complete
-                    </span>
+                    <span>{project.progress || 0}% complete</span>
+                  </div>
+
+                  <div className="project-progress-control">
+                    <label>
+                      Progress percentage
+                      <input
+                        type="number"
+                        min="0"
+                        max="100"
+                        value={progressValue}
+                        onChange={(event) =>
+                          setProgressDrafts((current) => ({
+                            ...current,
+                            [project.id]: event.target.value,
+                          }))
+                        }
+                      />
+                    </label>
+
+                    <button
+                      type="button"
+                      onClick={() =>
+                        saveProjectProgress(project)
+                      }
+                    >
+                      Save Progress
+                    </button>
                   </div>
 
                   <div className="progress-track">
                     <div
                       className="progress-fill"
                       style={{
-                        width: `${project.progress || 0}%`,
+                        width: `${progressValue}%`,
                       }}
                     />
                   </div>
@@ -383,7 +480,9 @@ function Projects() {
                       type="button"
                       className="edit-mission-button"
                       onClick={() =>
-                        navigate(`/edit-project/${project.id}`)
+                        navigate(
+                          `/edit-project/${project.id}`
+                        )
                       }
                     >
                       Edit
