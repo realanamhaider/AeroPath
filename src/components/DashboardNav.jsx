@@ -1,4 +1,4 @@
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router";
 import { signOut } from "firebase/auth";
 import { auth } from "../firebase/firebase";
 

@@ -9,7 +9,7 @@ import {
   query,
 } from "firebase/firestore";
 import { auth, db } from "../firebase/firebase";
-import { Navigate, useNavigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router";
 import DashboardNav from "../components/DashboardNav";
 
 

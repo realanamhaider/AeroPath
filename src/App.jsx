@@ -4,7 +4,7 @@ import {
   Navigate,
   Route,
   Routes,
-} from "react-router-dom";
+} from "react-router";
 import { onAuthStateChanged } from "firebase/auth";
 
 import { auth } from "./firebase/firebase";

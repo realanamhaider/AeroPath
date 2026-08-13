@@ -5,7 +5,7 @@ import {
   updateDoc,
 } from "firebase/firestore";
 import { auth, db } from "../firebase/firebase";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router";
 
 function formatDueDate(dateString) {
   if (!dateString) return "";
