@@ -1,13 +1,18 @@
-import Library from "./pages/Library";
 import { useEffect, useState } from "react";
+
 import {
   Navigate,
   Route,
   Routes,
 } from "react-router";
-import { onAuthStateChanged } from "firebase/auth";
 
-import { auth } from "./firebase/firebase";
+import {
+  onAuthStateChanged,
+} from "firebase/auth";
+
+import {
+  auth,
+} from "./firebase/firebase";
 
 import Navbar from "./components/Navbar";
 import Hero from "./components/Hero";
@@ -17,46 +22,61 @@ import SignUp from "./pages/SignUp";
 import Login from "./pages/Login";
 import ForgotPassword from "./pages/ForgotPassword";
 import Onboarding from "./pages/Onboarding";
+
 import Dashboard from "./pages/Dashboard";
-import AddMission from "./pages/AddMission";
-import EditMission from "./pages/EditMission";
-import Projects from "./pages/Projects";
-import EditProject from "./pages/EditProject";
-import Internships from "./pages/Internships";
-import Roadmap from "./pages/Roadmap";
+import Discover from "./pages/Discover";
+import Applications from "./pages/Applications";
+
 import Profile from "./pages/Profile";
 import Settings from "./pages/Settings";
 
 import "./App.css";
 
-function ProtectedRoute({ user, authLoading, children }) {
+function ProtectedRoute({
+  user,
+  authLoading,
+  children,
+}) {
   if (authLoading) {
     return (
       <main className="auth-page">
-        <p>Restoring your AeroPath session...</p>
+        <p>
+          Restoring your AeroPath session...
+        </p>
       </main>
     );
   }
 
   if (!user) {
-    return <Navigate to="/login" replace />;
+    return (
+      <Navigate
+        to="/login"
+        replace
+      />
+    );
   }
 
   return children;
 }
 
 function App() {
-  const [user, setUser] = useState(null);
-  const [authLoading, setAuthLoading] = useState(true);
+  const [user, setUser] =
+    useState(null);
+
+  const [
+    authLoading,
+    setAuthLoading,
+  ] = useState(true);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(
-      auth,
-      (currentUser) => {
-        setUser(currentUser);
-        setAuthLoading(false);
-      }
-    );
+    const unsubscribe =
+      onAuthStateChanged(
+        auth,
+        (currentUser) => {
+          setUser(currentUser);
+          setAuthLoading(false);
+        }
+      );
 
     return unsubscribe;
   }, []);
@@ -77,12 +97,21 @@ function App() {
         }
       />
 
-      <Route path="/signup" element={<SignUp />} />
-      <Route path="/login" element={<Login />} />
+      <Route
+        path="/signup"
+        element={<SignUp />}
+      />
+
+      <Route
+        path="/login"
+        element={<Login />}
+      />
 
       <Route
         path="/forgot-password"
-        element={<ForgotPassword />}
+        element={
+          <ForgotPassword />
+        }
       />
 
       <Route
@@ -90,7 +119,9 @@ function App() {
         element={
           <ProtectedRoute
             user={user}
-            authLoading={authLoading}
+            authLoading={
+              authLoading
+            }
           >
             <Onboarding />
           </ProtectedRoute>
@@ -102,7 +133,9 @@ function App() {
         element={
           <ProtectedRoute
             user={user}
-            authLoading={authLoading}
+            authLoading={
+              authLoading
+            }
           >
             <Dashboard />
           </ProtectedRoute>
@@ -110,83 +143,29 @@ function App() {
       />
 
       <Route
-        path="/add-mission"
+        path="/discover"
         element={
           <ProtectedRoute
             user={user}
-            authLoading={authLoading}
+            authLoading={
+              authLoading
+            }
           >
-            <AddMission />
+            <Discover />
           </ProtectedRoute>
         }
       />
 
       <Route
-        path="/edit-mission/:missionId"
+        path="/applications"
         element={
           <ProtectedRoute
             user={user}
-            authLoading={authLoading}
+            authLoading={
+              authLoading
+            }
           >
-            <EditMission />
-          </ProtectedRoute>
-        }
-      />
-
-      <Route
-        path="/projects"
-        element={
-          <ProtectedRoute
-            user={user}
-            authLoading={authLoading}
-          >
-            <Projects />
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/edit-project/:projectId"
-        element={
-          <ProtectedRoute 
-            user={user}
-            authLoading={authLoading}
-          >
-
-            <EditProject />
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/library"
-        element={
-          <ProtectedRoute 
-            user={user}
-            authLoading={authLoading}
-          >
-            <Library />
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/internships"
-        element={
-          <ProtectedRoute
-            user={user}
-            authLoading={authLoading}
-          >
-            <Internships />
-          </ProtectedRoute>
-        }
-      />
-
-      <Route
-        path="/roadmap"
-        element={
-          <ProtectedRoute
-            user={user}
-            authLoading={authLoading}
-          >
-            <Roadmap />
+            <Applications />
           </ProtectedRoute>
         }
       />
@@ -196,7 +175,9 @@ function App() {
         element={
           <ProtectedRoute
             user={user}
-            authLoading={authLoading}
+            authLoading={
+              authLoading
+            }
           >
             <Profile />
           </ProtectedRoute>
@@ -208,14 +189,74 @@ function App() {
         element={
           <ProtectedRoute
             user={user}
-            authLoading={authLoading}
+            authLoading={
+              authLoading
+            }
           >
             <Settings />
           </ProtectedRoute>
         }
       />
 
-      <Route path="*" element={<Navigate to="/" replace />} />
+      <Route
+        path="/internships"
+        element={
+          <Navigate
+            to="/discover"
+            replace
+          />
+        }
+      />
+
+      <Route
+        path="/library"
+        element={
+          <Navigate
+            to="/discover"
+            replace
+          />
+        }
+      />
+
+      <Route
+        path="/projects"
+        element={
+          <Navigate
+            to="/applications"
+            replace
+          />
+        }
+      />
+
+      <Route
+        path="/roadmap"
+        element={
+          <Navigate
+            to="/dashboard"
+            replace
+          />
+        }
+      />
+
+      <Route
+        path="/add-mission"
+        element={
+          <Navigate
+            to="/applications"
+            replace
+          />
+        }
+      />
+
+      <Route
+        path="*"
+        element={
+          <Navigate
+            to="/"
+            replace
+          />
+        }
+      />
     </Routes>
   );
 }
